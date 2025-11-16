@@ -1,40 +1,104 @@
 import pandas as pd
 from sqlalchemy import create_engine
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Table
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Spacer
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+
 
 # Corrigido: pymysql
 engine = create_engine("mysql+pymysql://user:senha@localhost/nxfi")
 
 
+def formatar_moeda(valor):
+    return f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+
+
+
 def gerar_relatorio_fluxo_caixa(mes, ano):
-    query = f"""
-        SELECT data, categoria, centro_custo, tipo, valor
-        FROM transacoes_financeiras
-        WHERE MONTH(data) = {mes} AND YEAR(data) = {ano};
-    """
 
-    df = pd.read_sql(query, engine)
+    try:
+        query = f"""
+            SELECT data, categoria, centro_custo, tipo, valor
+            FROM transacoes_financeiras
+            WHERE MONTH(data) = {mes} AND YEAR(data) = {ano};
+        """
 
-    total_entrada = df[df['tipo'] == 'entrada']['valor'].sum()
-    total_saida = df[df['tipo'] == 'saida']['valor'].sum()
-    saldo_final = total_entrada - total_saida
+        df = pd.read_sql(query, engine)
 
-    doc = SimpleDocTemplate(f"fluxo_caixa_{mes}_{ano}.pdf")
-    estilos = getSampleStyleSheet()
+        if df.empty:
+            print("Nenhum dado encontrado para esse período")
+            return
 
-    conteudo = [
-        Paragraph(f"Relatório de fluxo de caixa - {mes}/{ano}", estilos['Title']),
-        Paragraph(f"Entradas: R$ {total_entrada:,.2f}", estilos['Normal']),
-        Paragraph(f"Saídas: R$ {total_saida:,.2f}", estilos['Normal']),
-        Paragraph(f"Saldo Final: R$ {saldo_final:,.2f}", estilos['Normal']),
-        Table([df.columns.tolist()] + df.values.tolist())
-    ]
+        
+        df['valor_float'] = df['valor'].astype(float)
+        
+        df["data"] = pd.to_datetime(df["data"]).dt.strftime("%d/%m/%Y")
+        df["valor"] = df["valor_float"].apply(formatar_moeda)
 
-    doc.build(conteudo)
 
-    print(f"Relatório gerado: fluxo_caixa_{mes}_{ano}.pdf")
+        total_entrada = df[df['tipo'] == 'entrada']['valor_float'].sum()
+        total_saida = df[df['tipo'] == 'saida']['valor_float'].sum()
+        saldo_final = total_entrada - total_saida
+        
+        #total_entrada = entradas['valor'].str.replace("R$ ", "").str.replace(",", "").str.replace(",", ".").astype(float).sum()
+       # total_saida = saidas['valor'].str.replace("R$ ", "").str.replace(".", "").str.replace(",", ".").astype(float).sum()
+        #saldo_final = total_entrada - total_saida
 
+        doc = SimpleDocTemplate(
+            f"fluxo_caixa_{mes}_{ano}.pdf",
+            pagesize=A4,
+            rightMargin = 30, leftMargin = 30, topMargin = 30, bottomMargin = 30
+        )
+
+        estilos = getSampleStyleSheet()
+        titulo = estilos['Title']
+
+        resumo_style = ParagraphStyle(
+            'Resumo',
+            parent=estilos['Normal'],
+            fontSize=12,
+            leading=14,
+            #textColor = colors.black,
+            spaceAfter=10
+        )
+
+        conteudo = []
+
+        conteudo.append(Paragraph(f"Relatório de Fluxo de Caixa - {mes}/{ano}", titulo))
+        conteudo.append(Spacer(1, 20))
+
+        resumo_texto = f"""
+        <b>Entradas:</b> {formatar_moeda(total_entrada)}<br/>
+        <b>Saídas:</b> {formatar_moeda(total_saida)}<br/>
+        <b>Saldo Final:</b> {formatar_moeda(saldo_final)}
+
+        """
+        conteudo.append(Paragraph(resumo_texto, resumo_style))
+        conteudo.append(Spacer(1,20))
+
+        tabela_dados = [df[['data', 'categoria', 'centro_custo', 'tipo', 'valor']].columns.tolist()] + \
+                        df[['data', 'categoria', 'centro_custo', 'tipo', 'valor']].values.tolist()
+        tabela= Table(tabela_dados, repeatRows=1)
+
+        tabela.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#4682B4")),
+            ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+            ('GRID', (0,0), (-1, -1), 0.3, colors.grey),
+            ('FONTNAME', (0, 0), (-1,0), 'Helvetica-Bold'),
+            ('ALIGN', (0,0), (-1, -1), 'CENTER'),
+            ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.whitesmoke, colors.lightgrey]),
+        ])) 
+
+        conteudo.append(tabela)
+
+        doc.build(conteudo)
+
+        print(f"Relatório gerado com sucesso: fluxo_caixa_{mes}_{ano}.pdf")
+
+    except Exception as e:
+        print("Erro ao gerar relatório:", str(e))
 
 # Teste
 gerar_relatorio_fluxo_caixa(10, 2025)
