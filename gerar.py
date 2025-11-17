@@ -4,10 +4,20 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, 
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
+import os
+from dotenv import load_dotenv
 
+# Load environment variables
+load_dotenv()
 
-# Corrigido: pymysql
-engine = create_engine("mysql+pymysql://user:senha@localhost/nxfi")
+# Database connection using environment variables
+DB_USER = os.getenv('DB_USER', 'user')
+DB_PASSWORD = os.getenv('DB_PASSWORD', 'senha')
+DB_HOST = os.getenv('DB_HOST', 'localhost')
+DB_PORT = os.getenv('DB_PORT', '3306')
+DB_NAME = os.getenv('DB_NAME', 'nxfi')
+
+engine = create_engine(f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
 
 
 def formatar_moeda(valor):
@@ -19,13 +29,13 @@ def formatar_moeda(valor):
 def gerar_relatorio_fluxo_caixa(mes, ano):
 
     try:
-        query = f"""
+        query = """
             SELECT data, categoria, centro_custo, tipo, valor
             FROM transacoes_financeiras
-            WHERE MONTH(data) = {mes} AND YEAR(data) = {ano};
+            WHERE MONTH(data) = %s AND YEAR(data) = %s;
         """
 
-        df = pd.read_sql(query, engine)
+        df = pd.read_sql(query, engine, params=(mes, ano))
 
         if df.empty:
             print("Nenhum dado encontrado para esse período")
@@ -46,6 +56,10 @@ def gerar_relatorio_fluxo_caixa(mes, ano):
        # total_saida = saidas['valor'].str.replace("R$ ", "").str.replace(".", "").str.replace(",", ".").astype(float).sum()
         #saldo_final = total_entrada - total_saida
 
+        if not os.path.exists("relatorios"):
+            os.makedirs("relatorios")
+
+        caminho_pdf = os.path.join("relatorios", f"fluxo_caixa_{mes}_{ano}.pdf")
         doc = SimpleDocTemplate(
             f"fluxo_caixa_{mes}_{ano}.pdf",
             pagesize=A4,
@@ -63,6 +77,18 @@ def gerar_relatorio_fluxo_caixa(mes, ano):
             #textColor = colors.black,
             spaceAfter=10
         )
+        
+        conteudo = [
+            Paragraph(f"Relatóri ode Fluxo de Caixa - {mes}/{ano}", titulo),
+            Spacer(1, 20),
+            Paragraph(
+                f"<b>Entradas:</b> {formatar_moeda(total_entrada)}<br/>"
+                f"<b>Saídas:</b> {formatar_moeda(total_saida)}<br/>"
+                f"<b>Saldo Final:</b> {formatar_moeda(saldo_final)}",
+                resumo_style
+            ),
+            Spacer(1, 20)
+        ]
 
         conteudo = []
 
