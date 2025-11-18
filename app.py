@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, send_file, flash
 from relatorio.gerar_relatorio import gerar_relatorio_fluxo_caixa
 import os
+from app.routes.user_routes import user_bp
 
 
 app = Flask(__name__)
@@ -41,6 +42,10 @@ def gerar():
 def download(filename):
     caminho = os.path.join("relatorios", filename)
     return send_file(caminho, as_attachment=True)
+
+
+
+app.register_blueprint(user_bp)
 
 if __name__ == "__main__":
     app.run(debug=True)
