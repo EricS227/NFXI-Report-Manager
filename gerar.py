@@ -61,7 +61,7 @@ def gerar_relatorio_fluxo_caixa(mes, ano):
 
         caminho_pdf = os.path.join("relatorios", f"fluxo_caixa_{mes}_{ano}.pdf")
         doc = SimpleDocTemplate(
-            f"fluxo_caixa_{mes}_{ano}.pdf",
+            caminho_pdf,
             pagesize=A4,
             rightMargin = 30, leftMargin = 30, topMargin = 30, bottomMargin = 30
         )
@@ -79,7 +79,7 @@ def gerar_relatorio_fluxo_caixa(mes, ano):
         )
         
         conteudo = [
-            Paragraph(f"Relatóri ode Fluxo de Caixa - {mes}/{ano}", titulo),
+            Paragraph(f"Relatório de Fluxo de Caixa - {mes}/{ano}", titulo),
             Spacer(1, 20),
             Paragraph(
                 f"<b>Entradas:</b> {formatar_moeda(total_entrada)}<br/>"
@@ -90,38 +90,32 @@ def gerar_relatorio_fluxo_caixa(mes, ano):
             Spacer(1, 20)
         ]
 
-        conteudo = []
-
-        conteudo.append(Paragraph(f"Relatório de Fluxo de Caixa - {mes}/{ano}", titulo))
-        conteudo.append(Spacer(1, 20))
-
-        resumo_texto = f"""
-        <b>Entradas:</b> {formatar_moeda(total_entrada)}<br/>
-        <b>Saídas:</b> {formatar_moeda(total_saida)}<br/>
-        <b>Saldo Final:</b> {formatar_moeda(saldo_final)}
-
-        """
-        conteudo.append(Paragraph(resumo_texto, resumo_style))
-        conteudo.append(Spacer(1,20))
-
-        tabela_dados = [df[['data', 'categoria', 'centro_custo', 'tipo', 'valor']].columns.tolist()] + \
+        tabela_dados  = [df[['data', 'categoria', 'centro_custo', 'tipo', 'valor']].columns.tolist()] + \
                         df[['data', 'categoria', 'centro_custo', 'tipo', 'valor']].values.tolist()
-        tabela= Table(tabela_dados, repeatRows=1)
 
+        tabela = Table(tabela_dados, repeatRows=1)
         tabela.setStyle(TableStyle([
-            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#4682B4")),
+            ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#4682B4")),
             ('TEXTCOLOR', (0,0), (-1,0), colors.white),
-            ('GRID', (0,0), (-1, -1), 0.3, colors.grey),
-            ('FONTNAME', (0, 0), (-1,0), 'Helvetica-Bold'),
-            ('ALIGN', (0,0), (-1, -1), 'CENTER'),
-            ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.whitesmoke, colors.lightgrey]),
-        ])) 
+            ('GRID', (0,0), (-1,-1), 0.3, colors.grey),
+            ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+            ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+            ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.whitesmoke, colors.lightgrey])
+        ]))
+      
+       
 
         conteudo.append(tabela)
 
         doc.build(conteudo)
 
-        print(f"Relatório gerado com sucesso: fluxo_caixa_{mes}_{ano}.pdf")
+        resumo = {
+            "entrada": formatar_moeda(total_entrada),
+            "saida": formatar_moeda(total_saida),
+            "saldo": formatar_moeda(saldo_final)
+        }
+
+        return caminho_pdf , resumo
 
     except Exception as e:
         print("Erro ao gerar relatório:", str(e))
