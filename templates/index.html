@@ -9,6 +9,8 @@
 <body>
 
     <div class="container">
+        <h2> Fluxo de Caixa</h2>
+
         <h2>Gerar relatório de fluxo de Caixa</h2>
 
         <form method="POST" action="/gerar">
@@ -32,16 +34,29 @@
             {% endif %}
         {% endwith %}
 
+        {% if resumo %}
+        <div class="dashboard">
+            <div class="card entrada">
+                <h3>Entradas</h3>
+                <p>{{ resumo.entrada }}</p>
 
+            </div>
+            <div class="card saída">
+                <h3>Saídas</h3>
+                <p>{{ resumo.saida }}</p>
 
+            </div>
+            <div class="card saldo">
+                <h3>Saldo Final</h3>
+                <p>{{ resumo.saldo}}</p>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if pdf_file %}
+            <a href="/download/{{ pdf_file }}" class="btn-download">Baixar PDF</a>
+        {% endif %}
     </div>
   
 </body>
-<style>
-    body { font-family: Arial; margin: 40px;}
-    form { margin-top: 20px;}
-    label { margin-right: 10px; }
-    select, input {margin-right: 20px;}
-    button { padding: 5px 12px; cursor:pointer;}
-</style>
 </html>
