@@ -1,8 +1,5 @@
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, create_engine
 from sqlalchemy.sql import func
-from app.models import Base
-from app.models import User
-from sqlalchemy import Column, Integer, String, Boolean, create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 Base = declarative_base()
@@ -10,6 +7,15 @@ Base = declarative_base()
 engine = create_engine("sqlite:///database.db", echo=False)
 
 SessionLocal = sessionmaker(bind=engine)
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 
 class User(Base):
     __tablename__ = "users"
