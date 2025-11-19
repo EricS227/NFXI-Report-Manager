@@ -2,8 +2,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.repositories.user_repository import UserRepository
 import jwt
 from datetime import datetime, timedelta
-from werkzeug.security import generate_password_hash, check_password_hash
-from app.repositories.user_repository import UserRepository
 from app.config import Config
 
 class AuthService:
@@ -18,9 +16,6 @@ class AuthService:
             return user
         return None
 
-        token = self.__generate__jwt(user)
-        return token
-    
     def __generate_jwt(self, user):
         payload = {
             "sub": user.id,
