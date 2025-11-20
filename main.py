@@ -11,7 +11,7 @@ app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key-change-in-production")
 # Initialize login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "auth.login"
+login_manager.login_view = "login"
 
 class LoginUser:
     def __init__(self, user):
