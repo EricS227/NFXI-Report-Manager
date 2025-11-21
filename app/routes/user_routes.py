@@ -51,7 +51,7 @@ def update_user(user_id):
     updated, error = service.update_user(user_id, request.json)
 
     if error:
-        return jsonify({"error"}), 404
+        return jsonify({"error": error}), 404
     return jsonify({"message": "Usuário atualizado"})
 
 #deletar usuário
