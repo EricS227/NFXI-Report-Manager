@@ -68,6 +68,30 @@ form button:hover {
     color: #a94442;
 }
 
+.flash.success {
+    background-color: #d4edda;
+    border: 1px solid #28a745;
+    color: #155724
+}
+
+.flash.danger {
+    background-color: #f8d7da;
+    border: 1px solid #dc3545;
+    color: #723c24;
+}
+
+.flash-warning {
+    background-color: #fff3cd;
+    border: 1px solid #ffc107;
+    color: #856404;
+}
+
+.flash-info {
+    background-color: #fff3cd;
+    border: 1px solid #16a2b8;
+    color: #0c2460;
+}
+
 .dashboard {
     display: flex;
     justify-content: space-between;
