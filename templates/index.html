@@ -17,21 +17,35 @@
             <label>Mês:</label>
             <select name="mes" required>
                 <option value="">Selecione</option>
-                {% for m in range(1,13) %}
-                <option value="{{ m }}">{{ m }}</option>
-                {% endfor %}
+                <option value="1">Janeiro</option>
+                <option value="2">Fevereiro</option>
+                <option value="3">Março</option>
+                <option value="4">Abril</option>
+                <option value="5">Maio</option>
+                <option value="6">Junho</option>
+                <option value="7">Julho</option>
+                <option value="8">Agosto</option>
+                <option value="9">Setembro</option>
+                <option value="10">Outubro</option>
+                <option value="11">Novembro</option>
+                <option value="12">Dezembro</option>
             </select>
 
             <label>Ano:</label>
-            <input type="number" name="ano" min="2000" required>
+            <select name="ano" required>
+                <option value="">Selecione</option>
+                {% for a in range(2000, 2027) %}
+                <option value="{{ a }}">{{ a }}</option>
+                {% endfor %}
+            </select>
 
             <button type="submit">Gerar PDF</button>
         </form>
 
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <p class="flash">{{ messages[0] }}</p>
-            {% endif %}
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% for cat, msg in messages %}
+                <div class="flash {{ cat }}">{{ msg }}</div>
+            {% endfor %}
         {% endwith %}
 
         {% if resumo %}
