@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Cadastrar Usuário</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Criar Conta</h2>
+
+        <form action="/register" method="POST">
+            <label for="username">Usuário</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Senha</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for ="role">Cargo</label>
+            <select id="role" name="role">
+                <option value="financeiro">Financeiro</option>
+                <option value="admin">Administrador</option>
+            </select>
+            
+            <button type="submit">Criar Conta</button>
+
+        </form>
+
+        <p>Já é cadastrado?</p>
+            <a href="/login">Entrar</a>
+        </p>
+    </div>
+</body>
+</html>
