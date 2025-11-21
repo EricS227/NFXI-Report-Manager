@@ -57,23 +57,27 @@
             <a href="/download/{{ pdf_file }}" class="btn-download">Baixar PDF</a>
         {% endif %}
 
-        
-    </div>
-    <script>
-        function logout() {
-            localStorage.removeItem("token");
-            window.location.href="/auth/login";
-        }
-    </script>
 
-    <button onclick="logout()" style="
+
+
+        <div style="margin-top: 20px;">
+            <a href="/transacoes" style="color: #4682B4;">+ Adicionar Transações</a>
+        </div>
+
+    </div>
+    <a href="/logout" style="
+    display: inline-block;
     background-color: #d9534f;
     color:white;
     border:none;
     padding: 8px 16px;
     border-radius:5px;
-    cursor:pointer">
+    cursor:pointer;
+    text-decoration: none;
+    margin-top: 20px;">
         Logout
-    </button>
+    </a>
+
+
 </body>
 </html>
