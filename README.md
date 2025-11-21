@@ -84,7 +84,3 @@ Create a `.env` file based on `.env.example`:
 SECRET_KEY=your-secret-key-here
 JWT_EXPIRATION=3600
 ```
-
-## 📝 License / Licença
-
-MIT
