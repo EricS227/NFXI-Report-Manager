@@ -43,7 +43,7 @@ def create_user():
 
 #atualizar usuário
 
-@user_bp.py("/<int:user_id>")
+@user_bp.put("/<int:user_id>")
 @admin_required
 def update_user(user_id):
     db = get_db()
