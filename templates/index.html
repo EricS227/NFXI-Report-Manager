@@ -54,14 +54,28 @@
         {% endif %}
 
         {% if pdf_file %}
-            <a href="/download/{{ pdf_file }}" class="btn-download">Baixar PDF</a>
+            <a href="/download/{{ pdf_file }}" style="
+                display: inline-block;
+                background-color: #4682B4;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                text-decoration: none;
+                margin-top: 20px;
+                cursor: pointer;
+            ">Baixar PDF</a>
         {% endif %}
 
-
-
-
         <div style="margin-top: 20px;">
-            <a href="/transacoes" style="color: #4682B4;">+ Adicionar Transações</a>
+            <a href="/transacoes" style="
+                display: inline-block;
+                background-color: #28a745;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                text-decoration: none;
+                cursor: pointer;
+            ">+ Adicionar Transações</a>
         </div>
 
     </div>
