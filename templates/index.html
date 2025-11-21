@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerar Fluxo de Caixa</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <h2> Fluxo de Caixa</h2>
+
+        <h2>Gerar relatório de fluxo de Caixa</h2>
+
+        <form method="POST" action="/gerar">
+            <label>Mês:</label>
+            <select name="mes" required>
+                <option value="">Selecione</option>
+                <option value="1">Janeiro</option>
+                <option value="2">Fevereiro</option>
+                <option value="3">Março</option>
+                <option value="4">Abril</option>
+                <option value="5">Maio</option>
+                <option value="6">Junho</option>
+                <option value="7">Julho</option>
+                <option value="8">Agosto</option>
+                <option value="9">Setembro</option>
+                <option value="10">Outubro</option>
+                <option value="11">Novembro</option>
+                <option value="12">Dezembro</option>
+            </select>
+
+            <label>Ano:</label>
+            <select name="ano" required>
+                <option value="">Selecione</option>
+                {% for a in range(2000, 2027) %}
+                <option value="{{ a }}">{{ a }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Gerar PDF</button>
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% for cat, msg in messages %}
+                <div class="flash {{ cat }}">{{ msg }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        {% if resumo %}
+        <div class="dashboard">
+            <div class="card entrada">
+                <h3>Entradas</h3>
+                <p>{{ resumo.entrada }}</p>
+
+            </div>
+            <div class="card saída">
+                <h3>Saídas</h3>
+                <p>{{ resumo.saida }}</p>
+
+            </div>
+            <div class="card saldo">
+                <h3>Saldo Final</h3>
+                <p>{{ resumo.saldo}}</p>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if pdf_file %}
+            <a href="/download/{{ pdf_file }}" style="
+                display: inline-block;
+                background-color: #4682B4;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                text-decoration: none;
+                margin-top: 20px;
+                cursor: pointer;
+            ">Baixar PDF</a>
+        {% endif %}
+
+        <div style="margin-top: 20px;">
+            <a href="/transacoes" style="
+                display: inline-block;
+                background-color: #28a745;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                text-decoration: none;
+                cursor: pointer;
+            ">+ Adicionar Transações</a>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <a href="/logout" style="
+                display: inline-block;
+                background-color: #d9534f;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                text-decoration: none;
+                cursor: pointer;
+            ">Logout</a>
+        </div>
+    </div>
+
+
+</body>
+</html>

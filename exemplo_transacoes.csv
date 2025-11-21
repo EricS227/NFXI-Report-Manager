@@ -1,0 +1,15 @@
+data,categoria,centro_custo,tipo,valor
+2025-12-01,Vendas,Comercial,entrada,5000.00
+2025-12-05,Salários,RH,saida,3000.00
+2025-12-10,Serviços,Operacional,entrada,2500.00
+2025-12-15,Aluguel,Administrativo,saida,1500.00
+2025-12-20,Consultoria,Comercial,entrada,4000.00
+2025-12-25,Materiais,Operacional,saida,800.00
+2025-12-28,Vendas,Comercial,entrada,3500.00
+2025-12-30,Internet,Administrativo,saida,200.00
+2026-01-02,Vendas,Comercial,entrada,6000.00
+2026-01-05,Salários,RH,saida,3200.00
+2026-01-10,Consultoria,Comercial,entrada,4500.00
+2026-01-15,Aluguel,Administrativo,saida,1500.00
+2026-01-20,Serviços,Operacional,entrada,3000.00
+2026-01-25,Marketing,Comercial,saida,1200.00

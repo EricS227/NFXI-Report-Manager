@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Transações</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Nova Transação</h2>
+
+        <form method="POST" action="/transacoes">
+            <label>Data:</label>
+            <input type="date" name="data" required>
+
+            <label>Categoria:</label>
+            <input type="text" name="categoria" placeholder="Ex: Vendas, Salários" required>
+
+            <label>Centro de Custo:</label>
+            <input type="text" name="centro_custo" placeholder="Ex: Comercial, RH" required>
+
+            <label>Tipo:</label>
+            <select name="tipo" required>
+                <option value="entrada">Entrada</option>
+                <option value="saida">Saída</option>
+            </select>
+
+            <label>Valor (R$):</label>
+            <input type="number" name="valor" step="0.01" min="0" placeholder="0.00" required>
+
+            <button type="submit">Adicionar Transação</button>
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% for cat, msg in messages %}
+                <div class="flash {{ cat }}">{{ msg }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        {% if transacoes %}
+        <h3 style="margin-top: 30px;">Transações Recentes</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <thead>
+                <tr style="background-color: #4682B4; color: white;">
+                    <th style="padding: 10px;">Data</th>
+                    <th style="padding: 10px;">Categoria</th>
+                    <th style="padding: 10px;">Centro Custo</th>
+                    <th style="padding: 10px;">Tipo</th>
+                    <th style="padding: 10px;">Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transacoes %}
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 8px; text-align: center;">{{ t.data }}</td>
+                    <td style="padding: 8px; text-align: center;">{{ t.categoria }}</td>
+                    <td style="padding: 8px; text-align: center;">{{ t.centro_custo }}</td>
+                    <td style="padding: 8px; text-align: center;">{{ t.tipo }}</td>
+                    <td style="padding: 8px; text-align: center;">R$ {{ "%.2f"|format(t.valor) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+        <div style="margin-top: 20px;">
+            <a href="/importar" style="color: #4682B4;">Importar CSV</a>
+            &nbsp;|&nbsp;
+            <a href="/" style="color: #4682B4;">← Voltar para Relatórios</a>
+        </div>
+    </div>
+</body>
+</html>

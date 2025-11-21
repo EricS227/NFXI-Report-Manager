@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Importar Transações</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Importar Transações via CSV</h2>
+
+        <form method="POST" action="/importar" enctype="multipart/form-data">
+            <label>Arquivo CSV:</label>
+            <input type="file" name="arquivo" accept=".csv" required>
+
+            <button type="submit">Importar</button>
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% for cat, msg in messages %}
+                <div class="flash {{ cat }}">{{ msg }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <div style="margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 5px;">
+            <h3>Formato do CSV</h3>
+            <p>O arquivo deve ter as seguintes colunas (com cabeçalho):</p>
+            <code style="display: block; background: #e9ecef; padding: 10px; margin: 10px 0; border-radius: 3px;">
+data,categoria,centro_custo,tipo,valor
+            </code>
+
+            <p><strong>Exemplo:</strong></p>
+            <code style="display: block; background: #e9ecef; padding: 10px; margin: 10px 0; border-radius: 3px; white-space: pre-line;">
+data,categoria,centro_custo,tipo,valor
+2025-12-01,Vendas,Comercial,entrada,5000.00
+2025-12-05,Salários,RH,saida,3000.00
+2025-12-10,Serviços,Operacional,entrada,2500.00
+2025-12-15,Aluguel,Administrativo,saida,1500.00
+            </code>
+
+            <p><strong>Notas:</strong></p>
+            <ul>
+                <li>Data no formato: YYYY-MM-DD (ex: 2025-12-01)</li>
+                <li>Tipo: "entrada" ou "saida"</li>
+                <li>Valor: número decimal com ponto (ex: 1500.00)</li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <a href="/transacoes" style="color: #4682B4;">← Voltar para Transações</a>
+            &nbsp;|&nbsp;
+            <a href="/" style="color: #4682B4;">Voltar para Relatórios</a>
+        </div>
+    </div>
+</body>
+</html>

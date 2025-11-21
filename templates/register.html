@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Usuário</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Criar Conta</h2>
+
+        <form action="/register" method="POST">
+            <label>Usuário</label>
+            <input type="text" name="username" required>
+
+            <label>Senha</label>
+            <input type="password" name="password" required>
+
+            <label>Confirmar Senha</label>
+            <input type="password" name="confirm_password" required>
+
+            <button type="submit">Criar Conta</button>
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% for cat, msg in messages %}
+                <div class="flash {{ cat }}">{{ msg }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <p style="margin-top: 20px;">Já é cadastrado? <a href="/login" style="color: #4682B4;">Entrar</a></p>
+    </div>
+</body>
+</html>
