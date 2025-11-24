@@ -48,6 +48,48 @@ def load_user(user_id):
 def home():
     return render_template("index.html", resumo=None, pdf_file=None)
 
+def formatar_moeda(valor):
+    return f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    with engine.connect() as conn:
+        # Get summary / Obtém resumo geral
+        result = conn.execute(text("""
+            SELECT
+                COALESCE(SUM(CASE WHEN tipo = 'entrada' THEN valor ELSE 0 END), 0) as income,
+                COALESCE(SUM(CASE WHEN tipo = 'saida' THEN valor ELSE 0 END), 0) as expense,
+                COUNT(*) as count
+            FROM transacoes_financeiras
+        """))
+        row = result.fetchone()
+        summary = {
+            "income": formatar_moeda(float(row[0])),
+            "expense": formatar_moeda(float(row[1])),
+            "balance": formatar_moeda(float(row[0]) - float(row[1])),
+            "count": row[2]
+        }
+
+        # Get monthly totals / Obtém totais mensais
+        result = conn.execute(text("""
+            SELECT strftime('%Y-%m', data) as month, SUM(valor) as total
+            FROM transacoes_financeiras
+            GROUP BY strftime('%Y-%m', data)
+            ORDER BY month
+        """))
+        monthly = [{"month": row[0], "total": float(row[1])} for row in result]
+
+        # Get totals by category / Obtém totais por categoria
+        result = conn.execute(text("""
+            SELECT categoria, SUM(valor) as total
+            FROM transacoes_financeiras
+            GROUP BY categoria
+        """))
+        categories = [[row[0], float(row[1])] for row in result]
+
+    return render_template("dashboard.html", summary=summary, monthly=monthly, categories=categories)
+
 @app.route("/gerar", methods=["POST"])
 @login_required
 def gerar():
@@ -186,6 +228,9 @@ def transacoes():
         transacoes_list = [dict(row._mapping) for row in result]
 
     return render_template("transacoes.html", transacoes=transacoes_list)
+
+
+
 
 @app.route("/importar", methods=["GET", "POST"])
 @login_required
