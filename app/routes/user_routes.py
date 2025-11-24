@@ -5,7 +5,7 @@ from app.utils.security import admin_required
 
 user_bp = Blueprint("users", __name__, url_prefix="/api/users")
 
-# Listar todos os usuários
+# List all users / Listar todos os usuários
 @user_bp.get("/")
 @admin_required
 def list_users():
@@ -17,7 +17,7 @@ def list_users():
         for u in users
     ])
 
-# criar usuário
+# Create user / Criar usuário
 @user_bp.post("/")
 @admin_required
 def create_user():
@@ -41,8 +41,7 @@ def create_user():
     }), 201
 
 
-#atualizar usuário
-
+# Update user / Atualizar usuário
 @user_bp.put("/<int:user_id>")
 @admin_required
 def update_user(user_id):
@@ -54,7 +53,7 @@ def update_user(user_id):
         return jsonify({"error": error}), 404
     return jsonify({"message": "Usuário atualizado"})
 
-#deletar usuário
+# Delete user / Deletar usuário
 @user_bp.delete("/<int:user_id>")
 @admin_required
 def delete_user(user_id):

@@ -5,19 +5,9 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 import os
-from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
-
-# Database connection using environment variables
-DB_USER = os.getenv('DB_USER', 'user')
-DB_PASSWORD = os.getenv('DB_PASSWORD', 'senha')
-DB_HOST = os.getenv('DB_HOST', 'localhost')
-DB_PORT = os.getenv('DB_PORT', '3306')
-DB_NAME = os.getenv('DB_NAME', 'nxfi')
-
-engine = create_engine(f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
+# SQLite database connection / Conexão com o banco SQLite
+engine = create_engine("sqlite:///database.db", echo=False)
 
 
 def formatar_moeda(valor):
@@ -32,10 +22,14 @@ def gerar_relatorio_fluxo_caixa(mes, ano):
         query = """
             SELECT data, categoria, centro_custo, tipo, valor
             FROM transacoes_financeiras
-            WHERE MONTH(data) = %s AND YEAR(data) = %s;
+            WHERE strftime('%m', data) = ? AND strftime('%Y', data) = ?;
         """
 
-        df = pd.read_sql(query, engine, params=(mes, ano))
+        # Format month with leading zero for SQLite / Formata o mês com zero à esquerda
+        mes_str = str(mes).zfill(2)
+        ano_str = str(ano)
+
+        df = pd.read_sql(query, engine, params=(mes_str, ano_str))
 
         if df.empty:
             return None
