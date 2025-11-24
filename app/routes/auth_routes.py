@@ -48,3 +48,11 @@ async def login(request: Request, db: Session = Depends(get_db)):
         raise HTTPException(401, "Credenciais inválidas")
     
     return JSONResponse({"token": token})
+
+
+
+@router.post("/logout")
+def logout():
+    response = RedirectResponse(url="/auth/login", status_code=302)
+    response.delete_cookie("access_token")
+    return response
