@@ -2,7 +2,7 @@ NFXI Report Manager
 Web application for cash flow management and financial reporting, with user authentication, role-based access control, dashboard, CSV import, and PDF report generation by month and year.
 Aplicação web para gerenciamento de fluxo de caixa e geração de relatórios financeiros, com autenticação de usuários, controle de acesso por perfil, dashboard, importação via CSV e geração de relatórios em PDF por mês e ano.
 
-🛠 Tech Stack / Tecnologias
+Tech Stack / Tecnologias
 
 Python 3
 Flask
@@ -15,7 +15,7 @@ Werkzeug (password hashing / hash de senhas)
 Chart.js (dashboard charts / gráficos do dashboard)
 
 
-✨ Features / Funcionalidades
+Features / Funcionalidades
 English
 
 User registration and login with hashed passwords
@@ -37,11 +37,11 @@ Geração sob demanda de relatórios de fluxo de caixa em PDF por mês e ano
 API REST para administração de usuários (apenas admin)
 
 
-🎯 Purpose / Objetivo
+Purpose / Objetivo
 This project was developed to practice real-world backend concepts with Flask: layered project organization (routes, services, repositories, models), authentication and role-based authorization, data persistence with SQLAlchemy, bulk CSV import, PDF generation with ReportLab, and a JSON REST API alongside server-rendered pages.
 Este projeto foi desenvolvido para praticar conceitos reais de backend com Flask: organização em camadas (rotas, serviços, repositórios, models), autenticação e autorização por perfil, persistência de dados com SQLAlchemy, importação em lote via CSV, geração de PDF com ReportLab, e uma API REST JSON convivendo com páginas renderizadas no servidor.
 
-📂 Project Structure / Estrutura do Projeto
+Project Structure / Estrutura do Projeto
 NFXI-Report-Manager/
 ├── main.py                       # Flask entry point / Ponto de entrada do Flask
 ├── create_db_and_admin.py        # Initializes DB and default admin user / Inicializa DB e admin padrão
@@ -114,7 +114,7 @@ Username: admin
 Password: changeme
 
 
-⚠️ Change this password immediately after the first login in a real environment.
+Change this password immediately after the first login in a real environment.
 Altere essa senha imediatamente após o primeiro login em um ambiente real.
 
 
