@@ -71,7 +71,7 @@ NFXI-Report-Manager/
 └── static/
     └── style.css
 
-🗄 Database / Banco de Dados
+Database / Banco de Dados
 The application uses SQLite (file database.db, created automatically on first run by create_db_and_admin.py).
 A aplicação utiliza SQLite (arquivo database.db, criado automaticamente na primeira execução por create_db_and_admin.py).
 Tables / Tabelas
@@ -80,7 +80,7 @@ Column / ColunaType / TipoNotes / ObservaçõesidINTEGERPrimary keyusernameVARCH
 transacoes_financeiras — created via raw SQL / criada via SQL direto
 Column / ColunaType / TipoNotes / ObservaçõesidINTEGERPrimary key, auto-incrementdataDATEFormat YYYY-MM-DDcategoriaVARCHAR(100)e.g. Vendas, Salários, Aluguelcentro_custoVARCHAR(100)e.g. Comercial, RH, OperacionaltipoVARCHAR(20)entrada or saidavalorDECIMAL(10,2)Monetary value / Valor monetário
 
-🚀 Quick Start / Início Rápido
+Quick Start / Início Rápido
 Requirements / Requisitos
 
 Python 3.10+
