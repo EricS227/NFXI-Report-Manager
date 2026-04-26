@@ -1,0 +1,5 @@
+# Flask session secret key / Chave secreta de sessão do Flask
+SECRET_KEY=change-me-to-a-random-string
+
+# JWT token expiration in seconds (default: 3600) / Expiração do token JWT em segundos
+JWT_EXPIRATION=3600
