@@ -1,4 +1,5 @@
 NFXI Report Manager
+
 Web application for cash flow management and financial reporting, with user authentication, role-based access control, dashboard, CSV import, and PDF report generation by month and year.
 Aplicação web para gerenciamento de fluxo de caixa e geração de relatórios financeiros, com autenticação de usuários, controle de acesso por perfil, dashboard, importação via CSV e geração de relatórios em PDF por mês e ano.
 
